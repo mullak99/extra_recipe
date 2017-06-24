@@ -28,3 +28,4 @@ If it says "failed, reboot" you should really reboot.  Re-trying the same app wi
 * Ian Beer for the amazingly simple, yet awesome, kernel exploit
 * @qwertyoruiop for the amazingly complicated, yet effective, memprot bypass
 * @Pwn20wnd for the offsets
+* @AppleBetasDev for the UI
