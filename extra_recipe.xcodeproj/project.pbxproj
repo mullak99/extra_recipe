@@ -18,6 +18,8 @@
 		445596F11EFF18010078EEDC /* SexyFillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445596E91EFF18010078EEDC /* SexyFillButton.swift */; };
 		445596F21EFF18010078EEDC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445596EA1EFF18010078EEDC /* ViewController.swift */; };
 		44CDC9231EFF190600620903 /* UIApplication+GracefulExit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CDC9221EFF190600620903 /* UIApplication+GracefulExit.swift */; };
+		44D4DBC21EFF22250020A115 /* 0.reload.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44D4DBC11EFF22250020A115 /* 0.reload.plist */; };
+		44D4DBC41EFF225D0020A115 /* reload in Resources */ = {isa = PBXBuildFile; fileRef = 44D4DBC31EFF225D0020A115 /* reload */; };
 		B0E5165B1E39459300CE4C47 /* README in Resources */ = {isa = PBXBuildFile; fileRef = B0E5165A1E39459300CE4C47 /* README */; };
 		B0F37BC11E361EAE00179E85 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F37BC01E361EAE00179E85 /* AppDelegate.swift */; };
 		B0F37BC81E361EAE00179E85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0F37BC71E361EAE00179E85 /* Assets.xcassets */; };
@@ -32,9 +34,6 @@
 		B3CEC2511ECE1AEB00508B1A /* bootstrap.tar in Resources */ = {isa = PBXBuildFile; fileRef = B3CEC2501ECE1AEB00508B1A /* bootstrap.tar */; };
 		B3CEC2551ECE1B0600508B1A /* tar in Resources */ = {isa = PBXBuildFile; fileRef = B3CEC2541ECE1B0600508B1A /* tar */; };
 		B3CEC25A1ECE321900508B1A /* mach_portal.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B3CEC2521ECE1AF800508B1A /* mach_portal.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		B3DDE7931ED72CAE0003660B /* 0.reload.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3DDE7921ED72CAE0003660B /* 0.reload.plist */; };
-		B3DDE7951ED72CBA0003660B /* dropbear.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3DDE7941ED72CBA0003660B /* dropbear.plist */; };
-		B3DDE7971ED72CC20003660B /* reload in Resources */ = {isa = PBXBuildFile; fileRef = B3DDE7961ED72CC20003660B /* reload */; };
 		B3DE70BB1EDAD6280053D5BA /* offsets.m in Sources */ = {isa = PBXBuildFile; fileRef = B3DE70B91EDAD6280053D5BA /* offsets.m */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +63,8 @@
 		445596E91EFF18010078EEDC /* SexyFillButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SexyFillButton.swift; sourceTree = "<group>"; };
 		445596EA1EFF18010078EEDC /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		44CDC9221EFF190600620903 /* UIApplication+GracefulExit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+GracefulExit.swift"; sourceTree = "<group>"; };
+		44D4DBC11EFF22250020A115 /* 0.reload.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = 0.reload.plist; sourceTree = "<group>"; };
+		44D4DBC31EFF225D0020A115 /* reload */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = reload; sourceTree = "<group>"; };
 		B0E5165A1E39459300CE4C47 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		B0F37BBD1E361EAE00179E85 /* extra_recipe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = extra_recipe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0F37BC01E361EAE00179E85 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,9 +86,6 @@
 		B3CEC2501ECE1AEB00508B1A /* bootstrap.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = bootstrap.tar; sourceTree = "<group>"; };
 		B3CEC2521ECE1AF800508B1A /* mach_portal.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mach_portal.dylib; sourceTree = "<group>"; };
 		B3CEC2541ECE1B0600508B1A /* tar */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = tar; sourceTree = "<group>"; };
-		B3DDE7921ED72CAE0003660B /* 0.reload.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = 0.reload.plist; sourceTree = "<group>"; };
-		B3DDE7941ED72CBA0003660B /* dropbear.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dropbear.plist; sourceTree = "<group>"; };
-		B3DDE7961ED72CC20003660B /* reload */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = reload; sourceTree = "<group>"; };
 		B3DE70B91EDAD6280053D5BA /* offsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = offsets.m; sourceTree = "<group>"; };
 		B3DE70BA1EDAD6280053D5BA /* offsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = offsets.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,11 +120,7 @@
 		B0F37BBF1E361EAE00179E85 /* extra_recipe */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
-				B3DDE7961ED72CC20003660B /* reload */,
-				B3DDE7941ED72CBA0003660B /* dropbear.plist */,
-				B3DDE7921ED72CAE0003660B /* 0.reload.plist */,
-=======
+				44D4DBC11EFF22250020A115 /* 0.reload.plist */,
 				445596E31EFF18010078EEDC /* Device.swift */,
 				445596E41EFF18010078EEDC /* DrawerToggleView.swift */,
 				445596E51EFF18010078EEDC /* JailbreakStatus.swift */,
@@ -138,7 +132,6 @@
 				44CDC9221EFF190600620903 /* UIApplication+GracefulExit.swift */,
 				445596DA1EFF160A0078EEDC /* LaunchScreen.storyboard */,
 				445596E01EFF17980078EEDC /* Main.storyboard */,
->>>>>>> master
 				B3A27E561EE81A7500008AA7 /* dex.plist */,
 				B31B47801EE5F39900C9F259 /* patchfinder64.c */,
 				B31B47811EE5F39900C9F259 /* patchfinder64.h */,
@@ -152,6 +145,7 @@
 				B39A22171ECBB89D00F0EE23 /* unjail.m */,
 				B337975E1ED35C6200FC0BEB /* launchctl */,
 				B3CEC2541ECE1B0600508B1A /* tar */,
+				44D4DBC31EFF225D0020A115 /* reload */,
 				B3CEC2521ECE1AF800508B1A /* mach_portal.dylib */,
 				B3CEC2501ECE1AEB00508B1A /* bootstrap.tar */,
 				B3CEC24E1ECE1ADD00508B1A /* def.plist */,
@@ -228,22 +222,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B337975F1ED35C6200FC0BEB /* launchctl in Resources */,
+				44D4DBC21EFF22250020A115 /* 0.reload.plist in Resources */,
 				445596DE1EFF160B0078EEDC /* LaunchScreen.storyboard in Resources */,
 				B0E5165B1E39459300CE4C47 /* README in Resources */,
 				B3CEC24F1ECE1ADD00508B1A /* def.plist in Resources */,
-<<<<<<< HEAD
-				B0F37BCB1E361EAE00179E85 /* LaunchScreen.storyboard in Resources */,
-				B3DDE7931ED72CAE0003660B /* 0.reload.plist in Resources */,
 				B0F37BC81E361EAE00179E85 /* Assets.xcassets in Resources */,
 				B3CEC2511ECE1AEB00508B1A /* bootstrap.tar in Resources */,
-				B3DDE7971ED72CC20003660B /* reload in Resources */,
-				B3DDE7951ED72CBA0003660B /* dropbear.plist in Resources */,
-				B0F37BC61E361EAE00179E85 /* Main.storyboard in Resources */,
-=======
-				B0F37BC81E361EAE00179E85 /* Assets.xcassets in Resources */,
-				B3CEC2511ECE1AEB00508B1A /* bootstrap.tar in Resources */,
+				44D4DBC41EFF225D0020A115 /* reload in Resources */,
 				445596E21EFF17980078EEDC /* Main.storyboard in Resources */,
->>>>>>> master
 				B3A27E571EE81A7500008AA7 /* dex.plist in Resources */,
 				B3CEC2551ECE1B0600508B1A /* tar in Resources */,
 			);
