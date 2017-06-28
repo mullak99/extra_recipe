@@ -26,10 +26,12 @@ class ViewController: UIViewController, DrawerToggleViewDelegate {
         progressContainerView.effect = nil
         progressView.alpha = 0
         progressContainerView.isHidden = true
+        substrateEnable = (substrateEnabledSwitch.isOn ? 1 : 0);
         progressView.updateProgressState(with: ProgressState(text: "Working on it…", image: nil, spinnerState: .none, overrideRingColour: nil), animated: false)
         drawerToggleView.delegate = self
         menuDarkeningView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.menuDarkeningViewTapped)))
         loadDeviceData()
+        print("substrate:", substrateEnable);
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -42,6 +44,11 @@ class ViewController: UIViewController, DrawerToggleViewDelegate {
         if drawerToggleView.isOpen {
             setDrawer(opened: false)
         }
+    }
+    
+    @IBAction func substrateEnabled(_ sender: Any) {
+        substrateEnable = (substrateEnabledSwitch.isOn ? 1 : 0);
+        print("substrate:", substrateEnable);
     }
     
     @IBAction func bang(_ sender: UIButton) {
