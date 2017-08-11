@@ -2,6 +2,8 @@
 
 ![extra_recipe logo](https://raw.githubusercontent.com/mullak99/extra_recipe/master/extra_recipe/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60%403x.png)
 
+Please use the ['Issues'](https://github.com/mullak99/extra_recipe/issues) tab for reporting any issues.
+
 ## (Recommended) How-to
 
 Clean reboot the device, wait for a couple of minutes, start extra_recipe, wait for 5 seconds or so, then hit "go".
