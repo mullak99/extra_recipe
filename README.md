@@ -45,7 +45,7 @@ If it says "failed, reboot" you should really reboot.  Re-trying the same app wi
 
 
 
-(Also can be found in the ['Releases'](https://github.com/mullak99/yalu102/releases) tab if the builds server dies).
+(Also can be found in the ['Releases'](https://github.com/mullak99/extra_recipe/releases) tab if the builds server dies).
 
 
 ## Credits:
