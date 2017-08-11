@@ -18,6 +18,7 @@
 		445596F11EFF18010078EEDC /* SexyFillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445596E91EFF18010078EEDC /* SexyFillButton.swift */; };
 		445596F21EFF18010078EEDC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445596EA1EFF18010078EEDC /* ViewController.swift */; };
 		4475B4E01F039B5C0038B18B /* bootstrap_nocydia.tar in Resources */ = {isa = PBXBuildFile; fileRef = 4475B4DF1F039B5C0038B18B /* bootstrap_nocydia.tar */; };
+		44BA6FDB1F3D8CDB00F76D18 /* dropbear.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44BA6FDA1F3D8CDB00F76D18 /* dropbear.plist */; };
 		44CDC9231EFF190600620903 /* UIApplication+GracefulExit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CDC9221EFF190600620903 /* UIApplication+GracefulExit.swift */; };
 		44D4DBC21EFF22250020A115 /* 0.reload.plist in Resources */ = {isa = PBXBuildFile; fileRef = 44D4DBC11EFF22250020A115 /* 0.reload.plist */; };
 		44D4DBC41EFF225D0020A115 /* reload in Resources */ = {isa = PBXBuildFile; fileRef = 44D4DBC31EFF225D0020A115 /* reload */; };
@@ -64,6 +65,7 @@
 		445596E91EFF18010078EEDC /* SexyFillButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SexyFillButton.swift; sourceTree = "<group>"; };
 		445596EA1EFF18010078EEDC /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4475B4DF1F039B5C0038B18B /* bootstrap_nocydia.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = bootstrap_nocydia.tar; sourceTree = "<group>"; };
+		44BA6FDA1F3D8CDB00F76D18 /* dropbear.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = dropbear.plist; sourceTree = "<group>"; };
 		44CDC9221EFF190600620903 /* UIApplication+GracefulExit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+GracefulExit.swift"; sourceTree = "<group>"; };
 		44D4DBC11EFF22250020A115 /* 0.reload.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = 0.reload.plist; sourceTree = "<group>"; };
 		44D4DBC31EFF225D0020A115 /* reload */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = reload; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				B0E5165A1E39459300CE4C47 /* README */,
 				B3DE70B91EDAD6280053D5BA /* offsets.m */,
 				B3DE70BA1EDAD6280053D5BA /* offsets.h */,
+				44BA6FDA1F3D8CDB00F76D18 /* dropbear.plist */,
 			);
 			path = extra_recipe;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				B3CEC2511ECE1AEB00508B1A /* bootstrap.tar in Resources */,
 				4475B4E01F039B5C0038B18B /* bootstrap_nocydia.tar in Resources */,
 				44D4DBC41EFF225D0020A115 /* reload in Resources */,
+				44BA6FDB1F3D8CDB00F76D18 /* dropbear.plist in Resources */,
 				445596E21EFF17980078EEDC /* Main.storyboard in Resources */,
 				B3A27E571EE81A7500008AA7 /* dex.plist in Resources */,
 				B3CEC2551ECE1B0600508B1A /* tar in Resources */,
