@@ -4,3 +4,4 @@
 
 int jb_go();
 int init_offsets();
+int substrateEnable;

@@ -14,6 +14,8 @@ typedef unsigned long long addr_t;
 
 #define IS64(image) (*(uint8_t *)(image) & 1)
 
+#define MACHO(p) ((*(unsigned int *)(p) & ~1) == 0xfeedface)
+
 /* generic stuff *************************************************************/
 
 #define UCHAR_MAX 255
@@ -25,11 +27,11 @@ boyermoore_horspool_memmem(const unsigned char* haystack, size_t hlen,
     size_t last, scan = 0;
     size_t bad_char_skip[UCHAR_MAX + 1]; /* Officially called:
                                           * bad character shift */
-
+    
     /* Sanity checks on the parameters */
     if (nlen <= 0 || !haystack || !needle)
         return NULL;
-
+    
     /* ---- Preprocess ---- */
     /* Initialize the table to default value */
     /* When a character is encountered that does not occur
@@ -38,17 +40,17 @@ boyermoore_horspool_memmem(const unsigned char* haystack, size_t hlen,
      */
     for (scan = 0; scan <= UCHAR_MAX; scan = scan + 1)
         bad_char_skip[scan] = nlen;
-
+    
     /* C arrays have the first byte at [0], therefore:
      * [nlen - 1] is the last byte of the array. */
     last = nlen - 1;
-
+    
     /* Then populate it with the analysis of the needle */
     for (scan = 0; scan < last; scan = scan + 1)
         bad_char_skip[needle[scan]] = last - scan;
-
+    
     /* ---- Do the matching ---- */
-
+    
     /* Search the haystack, while the needle can still be within it. */
     while (hlen >= nlen)
     {
@@ -56,20 +58,20 @@ boyermoore_horspool_memmem(const unsigned char* haystack, size_t hlen,
         for (scan = last; haystack[scan] == needle[scan]; scan = scan - 1)
             if (scan == 0) /* If the first byte matches, we've found it. */
                 return (void *)haystack;
-
+        
         /* otherwise, we need to skip some bytes and start again.
-           Note that here we are getting the skip value based on the last byte
-           of needle, no matter where we didn't match. So if needle is: "abcd"
-           then we are skipping based on 'd' and that value will be 4, and
-           for "abcdd" we again skip on 'd' but the value will be only 1.
-           The alternative of pretending that the mismatched character was
-           the last character is slower in the normal case (E.g. finding
-           "abcd" in "...azcd..." gives 4 by using 'd' but only
-           4-2==2 using 'z'. */
+         Note that here we are getting the skip value based on the last byte
+         of needle, no matter where we didn't match. So if needle is: "abcd"
+         then we are skipping based on 'd' and that value will be 4, and
+         for "abcdd" we again skip on 'd' but the value will be only 1.
+         The alternative of pretending that the mismatched character was
+         the last character is slower in the normal case (E.g. finding
+         "abcd" in "...azcd..." gives 4 by using 'd' but only
+         4-2==2 using 'z'. */
         hlen     -= bad_char_skip[haystack[last]];
         haystack += bad_char_skip[haystack[last]];
     }
-
+    
     return NULL;
 }
 
@@ -77,119 +79,119 @@ boyermoore_horspool_memmem(const unsigned char* haystack, size_t hlen,
 
 static int HighestSetBit(int N, uint32_t imm)
 {
-	int i;
-	for (i = N - 1; i >= 0; i--) {
-		if (imm & (1 << i)) {
-			return i;
-		}
-	}
-	return -1;
+    int i;
+    for (i = N - 1; i >= 0; i--) {
+        if (imm & (1 << i)) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 static uint64_t ZeroExtendOnes(unsigned M, unsigned N)	// zero extend M ones to N width
 {
-	(void)N;
-	return ((uint64_t)1 << M) - 1;
+    (void)N;
+    return ((uint64_t)1 << M) - 1;
 }
 
 static uint64_t RORZeroExtendOnes(unsigned M, unsigned N, unsigned R)
 {
-	uint64_t val = ZeroExtendOnes(M, N);
-	if (R == 0) {
-		return val;
-	}
-	return ((val >> R) & (((uint64_t)1 << (N - R)) - 1)) | ((val & (((uint64_t)1 << R) - 1)) << (N - R));
+    uint64_t val = ZeroExtendOnes(M, N);
+    if (R == 0) {
+        return val;
+    }
+    return ((val >> R) & (((uint64_t)1 << (N - R)) - 1)) | ((val & (((uint64_t)1 << R) - 1)) << (N - R));
 }
 
 static uint64_t Replicate(uint64_t val, unsigned bits)
 {
-	uint64_t ret = val;
-	unsigned shift;
-	for (shift = bits; shift < 64; shift += bits) {	// XXX actually, it is either 32 or 64
-		ret |= (val << shift);
-	}
-	return ret;
+    uint64_t ret = val;
+    unsigned shift;
+    for (shift = bits; shift < 64; shift += bits) {	// XXX actually, it is either 32 or 64
+        ret |= (val << shift);
+    }
+    return ret;
 }
 
 static int DecodeBitMasks(unsigned immN, unsigned imms, unsigned immr, int immediate, uint64_t *newval)
 {
-	unsigned levels, S, R, esize;
-	int len = HighestSetBit(7, (immN << 6) | (~imms & 0x3F));
-	if (len < 1) {
-		return -1;
-	}
-	levels = ZeroExtendOnes(len, 6);
-	if (immediate && (imms & levels) == levels) {
-		return -1;
-	}
-	S = imms & levels;
-	R = immr & levels;
-	esize = 1 << len;
-	*newval = Replicate(RORZeroExtendOnes(S + 1, esize, R), esize);
-	return 0;
+    unsigned levels, S, R, esize;
+    int len = HighestSetBit(7, (immN << 6) | (~imms & 0x3F));
+    if (len < 1) {
+        return -1;
+    }
+    levels = ZeroExtendOnes(len, 6);
+    if (immediate && (imms & levels) == levels) {
+        return -1;
+    }
+    S = imms & levels;
+    R = immr & levels;
+    esize = 1 << len;
+    *newval = Replicate(RORZeroExtendOnes(S + 1, esize, R), esize);
+    return 0;
 }
 
 static int DecodeMov(uint32_t opcode, uint64_t total, int first, uint64_t *newval)
 {
-	unsigned o = (opcode >> 29) & 3;
-	unsigned k = (opcode >> 23) & 0x3F;
-	unsigned rn, rd;
-	uint64_t i;
-
-	if (k == 0x24 && o == 1) {			// MOV (bitmask imm) <=> ORR (immediate)
-		unsigned s = (opcode >> 31) & 1;
-		unsigned N = (opcode >> 22) & 1;
-		if (s == 0 && N != 0) {
-			return -1;
-		}
-		rn = (opcode >> 5) & 0x1F;
-		if (rn == 31) {
-			unsigned imms = (opcode >> 10) & 0x3F;
-			unsigned immr = (opcode >> 16) & 0x3F;
-			return DecodeBitMasks(N, imms, immr, 1, newval);
-		}
-	} else if (k == 0x25) {				// MOVN/MOVZ/MOVK
-		unsigned s = (opcode >> 31) & 1;
-		unsigned h = (opcode >> 21) & 3;
-		if (s == 0 && h > 1) {
-			return -1;
-		}
-		i = (opcode >> 5) & 0xFFFF;
-		h *= 16;
-		i <<= h;
-		if (o == 0) {				// MOVN
-			*newval = ~i;
-			return 0;
-		} else if (o == 2) {			// MOVZ
-			*newval = i;
-			return 0;
-		} else if (o == 3 && !first) {		// MOVK
-			*newval = (total & ~((uint64_t)0xFFFF << h)) | i;
-			return 0;
-		}
-	} else if ((k | 1) == 0x23 && !first) {		// ADD (immediate)
-		unsigned h = (opcode >> 22) & 3;
-		if (h > 1) {
-			return -1;
-		}
-		rd = opcode & 0x1F;
-		rn = (opcode >> 5) & 0x1F;
-		if (rd != rn) {
-			return -1;
-		}
-		i = (opcode >> 10) & 0xFFF;
-		h *= 12;
-		i <<= h;
-		if (o & 2) {				// SUB
-			*newval = total - i;
-			return 0;
-		} else {				// ADD
-			*newval = total + i;
-			return 0;
-		}
-	}
-
-	return -1;
+    unsigned o = (opcode >> 29) & 3;
+    unsigned k = (opcode >> 23) & 0x3F;
+    unsigned rn, rd;
+    uint64_t i;
+    
+    if (k == 0x24 && o == 1) {			// MOV (bitmask imm) <=> ORR (immediate)
+        unsigned s = (opcode >> 31) & 1;
+        unsigned N = (opcode >> 22) & 1;
+        if (s == 0 && N != 0) {
+            return -1;
+        }
+        rn = (opcode >> 5) & 0x1F;
+        if (rn == 31) {
+            unsigned imms = (opcode >> 10) & 0x3F;
+            unsigned immr = (opcode >> 16) & 0x3F;
+            return DecodeBitMasks(N, imms, immr, 1, newval);
+        }
+    } else if (k == 0x25) {				// MOVN/MOVZ/MOVK
+        unsigned s = (opcode >> 31) & 1;
+        unsigned h = (opcode >> 21) & 3;
+        if (s == 0 && h > 1) {
+            return -1;
+        }
+        i = (opcode >> 5) & 0xFFFF;
+        h *= 16;
+        i <<= h;
+        if (o == 0) {				// MOVN
+            *newval = ~i;
+            return 0;
+        } else if (o == 2) {			// MOVZ
+            *newval = i;
+            return 0;
+        } else if (o == 3 && !first) {		// MOVK
+            *newval = (total & ~((uint64_t)0xFFFF << h)) | i;
+            return 0;
+        }
+    } else if ((k | 1) == 0x23 && !first) {		// ADD (immediate)
+        unsigned h = (opcode >> 22) & 3;
+        if (h > 1) {
+            return -1;
+        }
+        rd = opcode & 0x1F;
+        rn = (opcode >> 5) & 0x1F;
+        if (rd != rn) {
+            return -1;
+        }
+        i = (opcode >> 10) & 0xFFF;
+        h *= 12;
+        i <<= h;
+        if (o & 2) {				// SUB
+            *newval = total - i;
+            return 0;
+        } else {				// ADD
+            *newval = total + i;
+            return 0;
+        }
+    }
+    
+    return -1;
 }
 
 /* patchfinder ***************************************************************/
@@ -248,9 +250,9 @@ xref64(const uint8_t *buf, addr_t start, addr_t end, addr_t what)
 {
     addr_t i;
     uint64_t value[32];
-
+    
     memset(value, 0, sizeof(value));
-
+    
     end &= ~3;
     for (i = start & ~3; i < end; i += 4) {
         uint32_t op = *(uint32_t *)(buf + i);
@@ -259,11 +261,11 @@ xref64(const uint8_t *buf, addr_t start, addr_t end, addr_t what)
             signed adr = ((op & 0x60000000) >> 18) | ((op & 0xFFFFE0) << 8);
             //printf("%llx: ADRP X%d, 0x%llx\n", i, reg, ((long long)adr << 1) + (i & ~0xFFF));
             value[reg] = ((long long)adr << 1) + (i & ~0xFFF);
-        /*} else if ((op & 0xFFE0FFE0) == 0xAA0003E0) {
-            unsigned rd = op & 0x1F;
-            unsigned rm = (op >> 16) & 0x1F;
-            //printf("%llx: MOV X%d, X%d\n", i, rd, rm);
-            value[rd] = value[rm];*/
+            /*} else if ((op & 0xFFE0FFE0) == 0xAA0003E0) {
+             unsigned rd = op & 0x1F;
+             unsigned rm = (op >> 16) & 0x1F;
+             //printf("%llx: MOV X%d, X%d\n", i, rd, rm);
+             value[rd] = value[rm];*/
         } else if ((op & 0xFF000000) == 0x91000000) {
             unsigned rn = (op >> 5) & 0x1F;
             unsigned shift = (op >> 22) & 3;
@@ -282,12 +284,12 @@ xref64(const uint8_t *buf, addr_t start, addr_t end, addr_t what)
             //printf("%llx: LDR X%d, [X%d, 0x%x]\n", i, reg, rn, imm);
             if (!imm) continue;			// XXX not counted as true xref
             value[reg] = value[rn] + imm;	// XXX address, not actual value
-        /*} else if ((op & 0xF9C00000) == 0xF9000000) {
-            unsigned rn = (op >> 5) & 0x1F;
-            unsigned imm = ((op >> 10) & 0xFFF) << 3;
-            //printf("%llx: STR X%d, [X%d, 0x%x]\n", i, reg, rn, imm);
-            if (!imm) continue;			// XXX not counted as true xref
-            value[rn] = value[rn] + imm;	// XXX address, not actual value*/
+            /*} else if ((op & 0xF9C00000) == 0xF9000000) {
+             unsigned rn = (op >> 5) & 0x1F;
+             unsigned imm = ((op >> 10) & 0xFFF) << 3;
+             //printf("%llx: STR X%d, [X%d, 0x%x]\n", i, reg, rn, imm);
+             if (!imm) continue;			// XXX not counted as true xref
+             value[rn] = value[rn] + imm;	// XXX address, not actual value*/
         } else if ((op & 0x9F000000) == 0x10000000) {
             signed adr = ((op & 0x60000000) >> 18) | ((op & 0xFFFFE0) << 8);
             //printf("%llx: ADR X%d, 0x%llx\n", i, reg, ((long long)adr >> 11) + i);
@@ -309,9 +311,9 @@ calc64(const uint8_t *buf, addr_t start, addr_t end, int which)
 {
     addr_t i;
     uint64_t value[32];
-
+    
     memset(value, 0, sizeof(value));
-
+    
     end &= ~3;
     for (i = start & ~3; i < end; i += 4) {
         uint32_t op = *(uint32_t *)(buf + i);
@@ -320,11 +322,11 @@ calc64(const uint8_t *buf, addr_t start, addr_t end, int which)
             signed adr = ((op & 0x60000000) >> 18) | ((op & 0xFFFFE0) << 8);
             //printf("%llx: ADRP X%d, 0x%llx\n", i, reg, ((long long)adr << 1) + (i & ~0xFFF));
             value[reg] = ((long long)adr << 1) + (i & ~0xFFF);
-        /*} else if ((op & 0xFFE0FFE0) == 0xAA0003E0) {
-            unsigned rd = op & 0x1F;
-            unsigned rm = (op >> 16) & 0x1F;
-            //printf("%llx: MOV X%d, X%d\n", i, rd, rm);
-            value[rd] = value[rm];*/
+            /*} else if ((op & 0xFFE0FFE0) == 0xAA0003E0) {
+             unsigned rd = op & 0x1F;
+             unsigned rm = (op >> 16) & 0x1F;
+             //printf("%llx: MOV X%d, X%d\n", i, rd, rm);
+             value[rd] = value[rm];*/
         } else if ((op & 0xFF000000) == 0x91000000) {
             unsigned rn = (op >> 5) & 0x1F;
             unsigned shift = (op >> 22) & 3;
@@ -367,9 +369,9 @@ calc64mov(const uint8_t *buf, addr_t start, addr_t end, int which)
 {
     addr_t i;
     uint64_t value[32];
-
+    
     memset(value, 0, sizeof(value));
-
+    
     end &= ~3;
     for (i = start & ~3; i < end; i += 4) {
         uint32_t op = *(uint32_t *)(buf + i);
@@ -448,7 +450,7 @@ init_kernel(addr_t base, const char *filename)
     addr_t min = -1;
     addr_t max = 0;
     int is64 = 0;
-
+    
 #ifdef __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__
 #define close(f)
     rv = kread(base, buf, sizeof(buf));
@@ -460,23 +462,23 @@ init_kernel(addr_t base, const char *filename)
     if (fd < 0) {
         return -1;
     }
-
+    
     rv = read(fd, buf, sizeof(buf));
     if (rv != sizeof(buf)) {
         close(fd);
         return -1;
     }
 #endif	/* __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ */
-
-    if ((buf[0] & 0xFE) != 0xCE && buf[1] != 0xFA && buf[2] != 0xED && buf[3] != 0xFE) {
+    
+    if (!MACHO(buf)) {
         close(fd);
         return -1;
     }
-
+    
     if (IS64(buf)) {
         is64 = 4;
     }
-
+    
     q = buf + sizeof(struct mach_header) + is64;
     for (i = 0; i < hdr->ncmds; i++) {
         const struct load_command *cmd = (struct load_command *)q;
@@ -532,14 +534,14 @@ init_kernel(addr_t base, const char *filename)
         }
         q = q + cmd->cmdsize;
     }
-
+    
     kerndumpbase = min;
     xnucore_base -= kerndumpbase;
     prelink_base -= kerndumpbase;
     cstring_base -= kerndumpbase;
     pstring_base -= kerndumpbase;
     kernel_size = max - min;
-
+    
 #ifdef __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__
     kernel = malloc(kernel_size);
     if (!kernel) {
@@ -550,9 +552,9 @@ init_kernel(addr_t base, const char *filename)
         free(kernel);
         return -1;
     }
-
+    
     kernel_mh = kernel + base - min;
-
+    
     (void)filename;
 #undef close
 #else	/* __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ */
@@ -561,7 +563,7 @@ init_kernel(addr_t base, const char *filename)
         close(fd);
         return -1;
     }
-
+    
     q = buf + sizeof(struct mach_header) + is64;
     for (i = 0; i < hdr->ncmds; i++) {
         const struct load_command *cmd = (struct load_command *)q;
@@ -582,9 +584,9 @@ init_kernel(addr_t base, const char *filename)
         }
         q = q + cmd->cmdsize;
     }
-
+    
     close(fd);
-
+    
     (void)base;
 #endif	/* __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ */
     return 0;
@@ -1016,16 +1018,16 @@ find_symbol(const char *symbol)
     const struct mach_header *hdr = kernel_mh;
     const uint8_t *q;
     int is64 = 0;
-
+    
     if (IS64(hdr)) {
         is64 = 4;
     }
-
+    
     /* XXX will only work on a decrypted kernel */
     if (!kernel_delta) {
         return 0;
     }
-
+    
     /* XXX I should cache these.  ohwell... */
     q = (uint8_t *)(hdr + 1) + is64;
     for (i = 0; i < hdr->ncmds; i++) {
@@ -1064,7 +1066,7 @@ main(int argc, char **argv)
     const addr_t vm_kernel_slide = 0;
     rv = init_kernel(base, (argc > 1) ? argv[1] : "krnl");
     assert(rv == 0);
-
+    
     addr_t AGXCommandQueue_vtable = find_AGXCommandQueue_vtable();
     printf("\t\t\t<string>0x%llx</string>\n", AGXCommandQueue_vtable - vm_kernel_slide);
     addr_t OSData_getMetaClass = find_symbol("__ZNK6OSData12getMetaClassEv");
@@ -1079,9 +1081,9 @@ main(int argc, char **argv)
     printf("\t\t\t<string>0x%llx</string>\n", realhost - vm_kernel_slide);
     addr_t call5 = find_call5();
     printf("\t\t\t<string>0x%llx</string>\n", call5 - vm_kernel_slide);
-
+    
     assert(find_symbol("_rootvnode") == find_gPhysBase() + 0x38 - vm_kernel_slide);
-
+    
     term_kernel();
     return 0;
 }
