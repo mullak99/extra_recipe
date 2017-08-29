@@ -6,8 +6,10 @@ Please use the ['Issues'](https://github.com/mullak99/extra_recipe/issues) tab f
 
 ## (Recommended) How-to
 
-Clean reboot the device, wait for a couple of minutes, start extra_recipe, wait for 5 seconds or so, then hit "go".
-If it says "failed, reboot" you should really reboot.  Re-trying the same app will most likely encounter a kernel panic somewhere down the road.
+Clean reboot the device, wait for a couple of minutes, start extra_recipe, wait for 5 seconds or so, then hit "GO".
+If it says fails to jailbreak (App crashes or if you are told to reboot) you should really reboot.  Re-trying the same app will most likely encounter a kernel panic somewhere down the road.
+
+Sidenote: Some people recommend opening up a few apps before running extra_recipe, I am unsure if this helps or not.
 
 ## Supported Devices and iOS versions
 
