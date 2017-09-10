@@ -682,7 +682,7 @@ remappage[remapcnt++] = (x & (~PMK));\
     {
         uint64_t sysbootnonce = find_sysbootnonce();
         NSLog(@"%x", ReadAnywhere32(sysbootnonce));
-                    
+        
         WriteAnywhere32(sysbootnonce, 1);
     }
     
@@ -829,11 +829,11 @@ remappage[remapcnt++] = (x & (~PMK));\
 static int
 my_IOConnectTrap4(int conn, long unused, uint64_t x1, uint64_t x2, uint64_t x0, uint64_t func)
 {
-  uint32_t rv;
-  printf("0x%llx(0x%llx, 0x%llx, 0x%llx)\n", func, x0, x1, x2);
-  rv = kx5(func, x0, x1, x2, 0, 0);
-  printf("-> 0x%x\n", rv);
-  return rv;
+    uint32_t rv;
+    printf("0x%llx(0x%llx, 0x%llx, 0x%llx)\n", func, x0, x1, x2);
+    rv = kx5(func, x0, x1, x2, 0, 0);
+    printf("-> 0x%x\n", rv);
+    return rv;
 }
 
 int
@@ -904,12 +904,26 @@ unjail2(void)
         }
         
         {
-            char path[256];
-            uint32_t size = sizeof(path);
-            _NSGetExecutablePath(path, &size);
-            char* pt = realpath(path, 0);
+            
             
             {
+                char* pt;
+                
+                if (pathSize == 4096)
+                {
+                    char path[4096];
+                    uint32_t size = sizeof(path);
+                    _NSGetExecutablePath(path, &size);
+                    pt = realpath(path, 0);
+                }
+                else
+                {
+                    char path[256];
+                    uint32_t size = sizeof(path);
+                    _NSGetExecutablePath(path, &size);
+                    pt = realpath(path, 0);
+                }
+                
                 __block pid_t pd = 0;
                 NSString* execpath = [[NSString stringWithUTF8String:pt]  stringByDeletingLastPathComponent];
                 
@@ -1063,10 +1077,22 @@ unjail2(void)
         }
         
         {
-            char path[4096];
-            uint32_t size = sizeof(path);
-            _NSGetExecutablePath(path, &size);
-            char *pt = realpath(path, NULL);
+            char* pt;
+            
+            if (pathSize == 4096)
+            {
+                char path[4096];
+                uint32_t size = sizeof(path);
+                _NSGetExecutablePath(path, &size);
+                pt = realpath(path, NULL);
+            }
+            else
+            {
+                char path[256];
+                uint32_t size = sizeof(path);
+                _NSGetExecutablePath(path, &size);
+                pt = realpath(path, NULL);
+            }
             
             pid_t pd = 0;
             NSString *execpath = [[NSString stringWithUTF8String:pt] stringByDeletingLastPathComponent];
@@ -1092,7 +1118,7 @@ unjail2(void)
             NSLog(@"pid = %x", pd);
             waitpid(pd, NULL, 0);
         }
-        printf("jailbroken with substrate disabled!");
+        printf("jailbroken with substrate disabled");
         return 0;
     }
     

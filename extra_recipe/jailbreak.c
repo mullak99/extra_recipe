@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include <setjmp.h>
+
+#include <sys/utsname.h>
 
 #include <mach/mach.h>
 #include <mach/mach_error.h>
@@ -107,6 +110,7 @@ mach_port_t prealloc_port(int size) {
   
   if (err != KERN_SUCCESS) {
     printf("pre-allocated port allocation failed: %s\n", mach_error_string(err));
+      
     return MACH_PORT_NULL;
   }
   
@@ -601,6 +605,16 @@ uint64_t prepare_kernel_rw() {
   printf("all done!\n");
   
   return kernel_base;
+}
+
+int isJailed() {
+    struct utsname u = { 0 };
+    uname(&u);
+    if (strstr(u.version, "MarijuanARM")) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 int jb_go() {

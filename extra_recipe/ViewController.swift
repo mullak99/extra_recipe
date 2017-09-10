@@ -19,10 +19,25 @@ class ViewController: UIViewController, DrawerToggleViewDelegate {
     @IBOutlet weak var menuClosedConstraint: NSLayoutConstraint!
     @IBOutlet weak var menuDarkeningView: UIView!
     @IBOutlet weak var substrateEnabledSwitch: UISwitch!
+    @IBOutlet weak var pathSizeSwitch: UISwitch!
+    @IBOutlet weak var creditsLabel: UILabel!
     var hasStarted = false
-
+    var pathSize = 256;
+    
+    let substrateEnabledSwitchConstant = "substrateEnabledSwitch"
+    let experimentalPathSizeSwitchConstant = "experimentalPathSizeSwitch"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Defaults
+        let defaults = UserDefaults.standard
+        defaults.register(defaults: [substrateEnabledSwitchConstant : true])
+        defaults.register(defaults: [experimentalPathSizeSwitchConstant : false])
+        substrateEnabledSwitch.isOn = defaults.bool(forKey: substrateEnabledSwitchConstant)
+        pathSizeSwitch.isOn = defaults.bool(forKey: experimentalPathSizeSwitchConstant)
+        
+        creditsLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(creditsPopup(tapGestureRecognizer:))))
         progressContainerView.effect = nil
         progressView.alpha = 0
         progressContainerView.isHidden = true
@@ -31,7 +46,7 @@ class ViewController: UIViewController, DrawerToggleViewDelegate {
         drawerToggleView.delegate = self
         menuDarkeningView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ViewController.menuDarkeningViewTapped)))
         loadDeviceData()
-        print("substrate:", substrateEnable);
+        substrateEnabled(self)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -48,7 +63,27 @@ class ViewController: UIViewController, DrawerToggleViewDelegate {
     
     @IBAction func substrateEnabled(_ sender: Any) {
         substrateEnable = (substrateEnabledSwitch.isOn ? 1 : 0);
-        print("substrate:", substrateEnable);
+        saveSettings()
+        print("Enable Substrate: \(Bool(substrateEnable as NSNumber))")
+    }
+    
+    @IBAction func pathSize(_ sender: Any) {
+        pathSize = (pathSizeSwitch.isOn ? 4096 : 256);
+        saveSettings()
+        print("Path Size: \(pathSize)");
+    }
+    
+    func saveSettings() {
+        let defaults = UserDefaults.standard
+        defaults.set(substrateEnabledSwitch.isOn, forKey: substrateEnabledSwitchConstant)
+        defaults.set(pathSizeSwitch.isOn, forKey: experimentalPathSizeSwitchConstant)
+    }
+    
+    func creditsPopup(tapGestureRecognizer: UITapGestureRecognizer) {
+        let credits = "• Ian Beer for the kernel exploit\n• qwertyoruiop for the memprot bypass\n• Pwn20wnd for the offsets\n• AppleBetas for the UI\n• mullak99 for updating AppleBetas PR";
+        let alert = UIAlertController(title: "Credits", message: credits, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func bang(_ sender: UIButton) {
@@ -96,10 +131,15 @@ class ViewController: UIViewController, DrawerToggleViewDelegate {
     
     private func loadDeviceData() {
         let deviceName = Device().getDeviceName(extra: false)
+        let iosVersion = UIDevice.current.systemVersion
         let supported = init_offsets() == 0
-        deviceLabel.text = "\(deviceName)\nYour device is \(supported ? "" : "not ")supported."
-        goButton.isEnabled = supported
+        let jailed = Bool(isJailed() as NSNumber)
+        deviceLabel.text = "\(jailed ? "Jailed " : "Jailbroken ")\(deviceName) (iOS \(iosVersion))\nYour device is \(supported ? "" : "not ")supported."
+        if (supported && jailed) { goButton.isEnabled = true }
+        else { goButton.isEnabled = false }
+        print("\(jailed ? "Jailed " : "Jailbroken ")\(deviceName) (iOS \(iosVersion)) is \(supported ? "" : "not ")supported.")
     }
+    
     
     func setDrawer(opened open: Bool) {
         menuOpenedConstraint.isActive = open
@@ -123,6 +163,8 @@ class ViewController: UIViewController, DrawerToggleViewDelegate {
     func drawerToggleViewTapped(_ view: DrawerToggleView) {
         setDrawer(opened: !view.isOpen)
     }
+    
+    
     
 }
 

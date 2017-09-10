@@ -15,7 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        deleteOldLog()
+        redirectLogToDocuments()
         return true
     }
     
@@ -41,6 +42,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
+    func redirectLogToDocuments() {
+        
+        let allPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = allPaths.first!
+        let pathForLog = documentsDirectory.appending("/console.log")
+        
+        freopen(pathForLog.cString(using: String.Encoding.ascii)!, "a+", stderr)
+    }
     
+    func deleteOldLog() {
+        let fileManager = FileManager.default
+        let allPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = allPaths.first!
+        let pathForLog = documentsDirectory.appending("/console.log")
+        do {
+            if fileManager.fileExists(atPath: pathForLog) {
+                print("Deleted old log file")
+                try fileManager.removeItem(atPath: pathForLog)
+            }
+        } catch let error as NSError {
+            print(error)
+        }
+    }
 }
 
