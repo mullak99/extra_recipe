@@ -18,6 +18,16 @@ kern_return_t mach_vm_write(vm_map_t target_task, mach_vm_address_t address, vm_
 kern_return_t mach_vm_protect(vm_map_t target_task, mach_vm_address_t address, mach_vm_size_t size, boolean_t set_maximum, vm_prot_t new_protection);
 kern_return_t mach_vm_allocate(vm_map_t target, mach_vm_address_t *address, mach_vm_size_t size, int flags);
 
+int printf(const char * __restrict format, ...)
+{
+    va_list args;
+    va_start(args,format);
+    NSLogv([NSString stringWithUTF8String:format], args) ;
+    fprintf(stdout, format);
+    va_end(args);
+    return 1;
+}
+
 struct mac_policy_ops{
     uint64_t mpo_audit_check_postselect;
     uint64_t mpo_audit_check_preselect;

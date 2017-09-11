@@ -34,7 +34,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="15L-Oi-P1K">
                                         <rect key="frame" x="20" y="40" width="335" height="62"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EXTRA RECIPE + YALU" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7N-Iw-eF8">
+                                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EXTRA RECIPE + YALU" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7N-Iw-eF8">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -250,6 +250,7 @@
                         <outlet property="progressContainerView" destination="JBK-QT-eNS" id="3vF-xA-jxz"/>
                         <outlet property="progressView" destination="hDt-oz-E66" id="emp-NJ-cmM"/>
                         <outlet property="substrateEnabledSwitch" destination="JX4-ho-fp8" id="Ga5-KC-8CT"/>
+                        <outlet property="titleLabel" destination="D7N-Iw-eF8" id="xwm-fF-GYY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

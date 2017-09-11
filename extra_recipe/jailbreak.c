@@ -31,7 +31,6 @@ typedef mach_port_t io_connect_t;
 typedef mach_port_t io_object_t;
 typedef	char io_name_t[128];
 
-
 CFMutableDictionaryRef
 IOServiceMatching(const char* name );
 
