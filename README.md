@@ -41,6 +41,7 @@ Sidenote: Some people recommend opening up a few apps before running extra_recip
 
 | Version | Download | SHA1 |
 |---------|----------|------|
+| v1.3.1 | [Link](builds.mullak99.co.uk/Jailbreak/extra_recipe/extra_recipe-yaluX-AppleBetasUI-v1.3.1.ipa) | 97c0ef712293eec1540ee5686c55a62d2927be57  |
 | v1.3 | [Link](builds.mullak99.co.uk/Jailbreak/extra_recipe/extra_recipe-yaluX-AppleBetasUI-v1.3.ipa) | 4d6733d7c890ef0105b894cefa54d29e2e9d2a88  |
 | v1.2.1 | [Link](https://builds.mullak99.co.uk/Jailbreak/extra_recipe/extra_recipe-yaluX-AppleBetasUI-v1.2.1.ipa) | 995d8561f93e0302e2386f4d5a0d3dd8385d7174  |
 | v1.2-cydia | [Link](https://builds.mullak99.co.uk/Jailbreak/extra_recipe/extra_recipe-yaluX-AppleBetasUI-v1.2-cydia.ipa) | 54946d6c1fb6ce50a6741e03fa9a8cf177698bcb  |
